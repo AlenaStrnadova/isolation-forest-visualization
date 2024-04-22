@@ -1,6 +1,11 @@
-// npm install lodash  for use of _.sampleSize() : https://www.geeksforgeeks.org/lodash-_-samplesize-method/
-// lodash _.uniqWith() method https://www.geeksforgeeks.org/lodash-_-uniqwith-method/
-// npm install graphviz
+/**
+ * This library requires npm packages 
+ * {@link https://www.npmjs.com/package/lodash|lodash} and 
+ * {@link https://www.npmjs.com/package/graphviz|graphviz}
+ * @requires lodash
+ * @requires graphviz
+ * to install required packages run: "npm install graphviz" and "npm install lodash"
+ */
 
 // import lodash
 const _ = require('lodash');
@@ -8,34 +13,65 @@ const _ = require('lodash');
 // import graphviz (installed by: npm install graphviz)
 const graphviz = require('graphviz');
 
-// class for internal nodes
+/**
+ * Class for internal nodes
+ * Internal nodes have two child nodes
+ * @class
+ */
 class InternalNode {
+  /**
+   * Create an internal node
+   * @param {InternalNode|ExternalNode} left - Left subtree
+   * @param {InternalNode|ExternalNode} right - Right subtree
+   * @param {number} splitAttribute - Attribute used for splitting
+   * @param {number} splitValue - Splitting value
+   * @param {number} size - Size of the data in the internal node
+   */
   constructor (left, right, splitAttribute, splitValue, size) {
-    this.left = left; // left subtree
-    this.right = right; // right subtree
-    this.splitAttribute = splitAttribute; // attribute used for splitting
-    this.splitValue = splitValue; // splitting value
-    this.size = size; // size of the data in the internal node
+    this.left = left; 
+    this.right = right; 
+    this.splitAttribute = splitAttribute; 
+    this.splitValue = splitValue; 
+    this.size = size; 
   }
 }
 
-// class for external (isolated) nodes
+/**
+ * Class for external (leaf) nodes
+ * @class
+ */
 class ExternalNode {
+  /**
+   * Create an external node
+   * @param {number} size - Size of the data in the external node
+   * @param {number} depth - Depth of the external node in the isolation tree
+   */
   constructor (size, depth) {
-    this.size = size; // size of the data in the external node
-    this.depth = depth; // depth of the external node in the isolation tree
+    this.size = size; 
+    this.depth = depth; 
   }
 }
 
-// class for isolation forest
+/**
+ * Class for isolation forest 
+ * Includes methods for creating isolation forest, evaluation of anomalies and visualization
+ * @class
+ */
 class IsolationForest {
+  /**
+   * Create an isolation forest
+   * Constructor calls methods buildForest() and printForestInfo()
+   * @param {Array} data - Data to analyze
+   * @param {number} numberOfTrees - Number of isolation trees to build
+   * @param {number} sampleSize - Size of the sample of data
+   */
   constructor (data, numberOfTrees, sampleSize) {
-    // checking the data if it is non empty array of arrays
+    // Error handling: checking input data to be a non empty array of arrays
     if (!Array.isArray(data) || data.length === 0 || data[0].length === 0) {
       throw new Error('IsolationForest constructor(): Invalid input, data must be non-empty array of arrays.');
     }
 
-    // checking the data members if they are arrays of the same size
+    // Error handling: checking the data members to be arrays of the same size
     const expectedDataDimension = data[0].length
     for (let i = 1; i < data.length; i++) {
       // check if data members are all the same dimension
@@ -44,36 +80,37 @@ class IsolationForest {
       }
     }
 
-    // checking the data members are unique, using _.uniqWith and _.isEqual as a comparator (lodash library)
-    // compares based on content not reference
+    // Error handling: checking the data members to be unique, using lodash methods
+    // Compares based on content not reference
     const uniqueArray = _.uniqWith(data, _.isEqual)
     if (uniqueArray.length !== data.length) {
       throw new Error('IsolationForest constructor(): Invalid input, data members must be unique.');
     }
 
-    // checking the number of trees to be a positive integer
+    // Error handling: checking the number of trees to be a positive integer
     if (numberOfTrees <= 0 || !Number.isInteger(numberOfTrees)) {
       throw new Error('IsolationForest constructor(): Invalid input, number of trees must be positive integer.');
     }
 
-    // checking sample size to be a positive integer up to the size of data
+    // Error handling: checking sample size to be a positive integer up to the size of data
     if (sampleSize <= 0 || !Number.isInteger(sampleSize) || sampleSize > data.length) {
       throw new Error('IsolationForest constructor(): Invalid input, sample size must be positive integer up to the data size.');
     }
 
-    this.data = data; // data to analyse
-    this.numberOfTrees = numberOfTrees; // number of isolation trees to build
-    this.sampleSize = sampleSize; // size of the sample of data
-    this.forest = []; // array to store isolation trees
+    this.data = data; 
+    this.numberOfTrees = numberOfTrees; 
+    this.sampleSize = sampleSize; 
+    this.forest = []; // array to store a created collection of isolation trees
 
-    this.heightLimit = Math.ceil(Math.log2(sampleSize)); // average tree height based on IF algorithms
+    // average tree height based on IF algorithms
+    // used to stop recursion in the buildTree() method
+    this.heightLimit = Math.ceil(Math.log2(sampleSize)); 
 
     this.buildForest(); // build the isolation forest
     this.printForestInfo(); // print info about isolation forest
   }
 
   printForestInfo () {
-    // console.log("");
     console.log('\n===============================================');
     console.log('   data size: ' + this.data.length + ', number of attributes: ' + this.data[0].length);
     console.log('-----------------------------------------------');
@@ -85,7 +122,7 @@ class IsolationForest {
     console.log('===============================================\n');
   }
 
-  /// ////////// Training phase:
+  // >>>>>>>>>>>>> TRAINING PHASE (creating Isolation Forest) <<<<<<<<<<<<<
 
   // build forest (collection of trees) - called by constructor when class is initialized
   buildForest () {
@@ -152,7 +189,7 @@ class IsolationForest {
     }
   }
 
-  /// ////////// Evaluation phase:
+  // >>>>>>>>>>>>> EVALUATION PHASE (evaluating data for anomalies) <<<<<<<<<<<<<
 
   // compute path length for a given data member and a given isolation tree
   // first called with 3 arguments, recursion called with updated "currentPathLength" argument
@@ -258,7 +295,7 @@ class IsolationForest {
     return dataAnomalyScores; //   or better to console.log(dataAnomalyScores); ???
   }
 
-  /// ////////// Visualisation:
+  // >>>>>>>>>>>>> VISUALIZATION <<<<<<<<<<<<<
 
   // build graph using npm graphviz
   // inputs: graphviz graph, root node of the tree, default nodeIdCounter set to zero
