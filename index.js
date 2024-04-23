@@ -110,6 +110,9 @@ class IsolationForest {
     this.printForestInfo(); // print info about isolation forest
   }
 
+  /**
+   * Print information about the isolation forest
+   */
   printForestInfo () {
     console.log('\n===============================================');
     console.log('   data size: ' + this.data.length + ', number of attributes: ' + this.data[0].length);
@@ -124,9 +127,10 @@ class IsolationForest {
 
   // >>>>>>>>>>>>> TRAINING PHASE (creating Isolation Forest) <<<<<<<<<<<<<
 
-  // build forest (collection of trees) - called by constructor when class is initialized
+  /**
+   * Build forest (collection of trees) - called by constructor when class is initialized
+   */
   buildForest () {
-    // create collection of isolation trees (given "numberOfTrees", stores them in "this.forest" array)
     for (let i = 0; i < this.numberOfTrees; i++) {
       const sampledData = this.sample(this.data, this.sampleSize);// different data sample for each tree
       const iTree = this.buildTree(sampledData);
@@ -134,24 +138,33 @@ class IsolationForest {
     }
   }
 
-  // sample data - called by buildForest
+  /**
+   * Sample data - called by buildForest() method
+   * Using lodash method _.sampleSize
+   * @param {Array} dataToSample - Data to sample
+   * @param {number} sizeOfSample - Size of the sample
+   * @returns {Array} Sampled data
+   */
   sample (dataToSample, sizeOfSample) {
     return _.sampleSize(dataToSample, sizeOfSample);
   }
 
-  // build a tree - called by buildForest() method
-  // input - sampled data subset
+  /**
+   * Build a tree - called by buildForest() method
+   * @param {Array} treeData - Sampled data subset
+   * @param {number} [currentDepth=0] - Current depth of the tree
+   * @returns {*} Built tree
+   */
   buildTree (treeData, currentDepth = 0) {
     // if data cannot be divided further
     if (treeData.length <= 1 || currentDepth >= this.heightLimit) {
       return new ExternalNode(treeData.length, currentDepth); // create external (isolated)
     } else {
-      // increment depth when entering a new level
       currentDepth++;
 
       const numberOfAttributes = treeData[0].length;
-      let minValue; // = Infinity; // moved to the do while loop
-      let maxValue;//  = -Infinity;
+      let minValue;
+      let maxValue;
       let randomAttribute;
 
       do {
@@ -191,10 +204,15 @@ class IsolationForest {
 
   // >>>>>>>>>>>>> EVALUATION PHASE (evaluating data for anomalies) <<<<<<<<<<<<<
 
-  // compute path length for a given data member and a given isolation tree
-  // first called with 3 arguments, recursion called with updated "currentPathLength" argument
+  /**
+   * Compute path length for a given data member and a given isolation tree
+   * First call with 2 arguments and default currentPathLength = 0, recursive calls with updated currentPathLength
+   * @param {Array} dataMember - Data member
+   * @param {InternalNode} iTree - Isolation tree
+   * @param {number} [currentPathLength=0] - Current path length
+   * @returns {number} Path length
+   */
   pathLength (dataMember, iTree, currentPathLength = 0) {
-    // if iTree is an external node, return currentPathLenght + calculateC(isoTree.size)
     if (iTree instanceof ExternalNode) {
       return currentPathLength + this.calculateC(iTree.size);
     }
@@ -207,8 +225,11 @@ class IsolationForest {
     }
   }
 
-  // calculate the c
-  // input "size" is the size of the data set or subset
+  /**
+   * Calculate the c value
+   * @param {number} size - Size of the data set or subset
+   * @returns {number} Computed c value
+   */
   calculateC (size) {
     if (size > 2) {
       return 2 * (Math.log(size - 1) + 0.5772156649) - 2 * (size - 1) / this.data.length;
@@ -219,9 +240,13 @@ class IsolationForest {
     }
   }
 
-  // finds desired number of data members with highest anomaly scores across data, orders them and prints info
-  // helper method, called by dataAnomalyScore() method
-  // inputs: array with data anomaly scores, array with average data path lengths, number of highest values wanted
+  /**
+   * Find desired number of data members with highest anomaly scores across data, orders them and prints info
+   * called by dataAnomalyScore() method
+   * @param {Array} dataScores - Array with data anomaly scores
+   * @param {Array} dataLengths - Array with average data path lengths
+   * @param {number} numberOfMaxValues - Number of highest anomaly scores values wanted
+   */
   maxAnomalyScores (dataScores, dataLengths, numberOfMaxValues) {
     // create shallow copy of array, changing copy does not change original the original array
     const dataScoresCopy = [...dataScores];
@@ -229,7 +254,8 @@ class IsolationForest {
     let currentMaxValue, currentMaxValueIndex;
 
     do {
-      currentMaxValue = Math.max(...dataScoresCopy); // ... => spread syntax - to pass array members as individual arguments
+      // ... spread syntax -> to pass array members as individual arguments
+      currentMaxValue = Math.max(...dataScoresCopy); 
       currentMaxValueIndex = dataScoresCopy.indexOf(currentMaxValue);
       maxValuesIndexes.push(currentMaxValueIndex);
       dataScoresCopy[currentMaxValueIndex] = -Infinity;
@@ -253,11 +279,12 @@ class IsolationForest {
     console.log('====================================================================================================================');
   }
 
-  // calculate average path lenthgs for all data members over all isolation trees
+  /**
+   * Calculate average path lengths for all data members over all isolation trees
+   * @returns {Array} Average path lengths for each data member
+   */
   dataPathLength () {
-    // let maxHeight = this.sampleSize - 1;    // for normal usage, maybe make it a parameter so it can be set by user ????
     let totalLengths = 0;
-
     const averagePathLenghts = []; // array to store average path lenthg for each data member
 
     // loop through the data
@@ -269,11 +296,16 @@ class IsolationForest {
       averagePathLenghts.push(totalLengths / this.forest.length); // calculate average path an push into array
       totalLengths = 0; // reset the total path length for next data member
     }
-    // this.minPathLengths(averagePathLenghts, 10);
-    return averagePathLenghts; // or better to console.log(averagePathLengths); ???
+
+    return averagePathLenghts;
   }
 
-  // calculate anomaly score for all data members
+  /**
+   * Calculate anomaly score for all data members
+   * If called with numberOfAnomalies > 0, calls maxAnomalyScores() - evaluation of data
+   * @param {number} [numberOfAnomalies=0] - Number of anomalies
+   * @returns {Array} Anomaly scores for each data member
+   */
   dataAnomalyScore (numberOfAnomalies = 0) {
     // checking if numberOfAnomalies is an integer greater or equal to 0 and up to the data size
     if (numberOfAnomalies < 0 || numberOfAnomalies > this.data.length || !Number.isInteger(numberOfAnomalies)) {
@@ -292,14 +324,19 @@ class IsolationForest {
     if (numberOfAnomalies > 0) {
       this.maxAnomalyScores(dataAnomalyScores, dataAveragePath, numberOfAnomalies);
     }
-    return dataAnomalyScores; //   or better to console.log(dataAnomalyScores); ???
+    return dataAnomalyScores;
   }
 
   // >>>>>>>>>>>>> VISUALIZATION <<<<<<<<<<<<<
 
-  // build graph using npm graphviz
-  // inputs: graphviz graph, root node of the tree, default nodeIdCounter set to zero
-  // method only ever called only with two arguments, called by exportTree() and printDotString() methods
+  /**
+   * Build graph using npm graphviz
+   * Called by exportTree() method
+   * @param {*} graph - Graphviz graph
+   * @param {InternalNode} treeNode - Root node of the tree
+   * @param {number} [nodeIdCounter=0] - Default nodeIdCounter set to zero
+   * @returns {*} Graph
+   */
   buildGraph (graph, treeNode, nodeIdCounter = 0) {
     // helper function to recursively traverse the tree and build the graph
     function recursiveBuild (treeNode) {
