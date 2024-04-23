@@ -1,6 +1,6 @@
 /**
- * This library requires npm packages 
- * {@link https://www.npmjs.com/package/lodash|lodash} and 
+ * This library requires npm packages
+ * {@link https://www.npmjs.com/package/lodash|lodash} and
  * {@link https://www.npmjs.com/package/graphviz|graphviz}
  * To install required packages run: "npm install graphviz" and "npm install lodash"
  * @requires lodash
@@ -14,8 +14,8 @@ const _ = require('lodash');
 const graphviz = require('graphviz');
 
 /**
- * Class for internal nodes
- * Internal nodes have two child nodes
+ * Class for internal nodes,
+ * internal nodes have two child nodes.
  * @class
  */
 class InternalNode {
@@ -28,16 +28,16 @@ class InternalNode {
    * @param {number} size - Size of the data in the internal node
    */
   constructor (left, right, splitAttribute, splitValue, size) {
-    this.left = left; 
-    this.right = right; 
-    this.splitAttribute = splitAttribute; 
-    this.splitValue = splitValue; 
-    this.size = size; 
+    this.left = left;
+    this.right = right;
+    this.splitAttribute = splitAttribute;
+    this.splitValue = splitValue;
+    this.size = size;
   }
 }
 
 /**
- * Class for external (leaf) nodes
+ * Class for external (leaf) nodes.
  * @class
  */
 class ExternalNode {
@@ -47,20 +47,20 @@ class ExternalNode {
    * @param {number} depth - Depth of the external node in the isolation tree
    */
   constructor (size, depth) {
-    this.size = size; 
-    this.depth = depth; 
+    this.size = size;
+    this.depth = depth;
   }
 }
 
 /**
- * Class for isolation forest 
- * Includes methods for creating isolation forest, evaluation of anomalies and visualization
+ * Class for isolation forest,
+ * includes methods for creating isolation forest, evaluation of anomalies and visualization.
  * @class
  */
 class IsolationForest {
   /**
-   * Create an isolation forest
-   * Constructor calls methods buildForest() and printForestInfo()
+   * Create an isolation forest,
+   * constructor calls methods buildForest() and printForestInfo().
    * @param {Array} data - Data to analyze
    * @param {number} numberOfTrees - Number of isolation trees to build
    * @param {number} sampleSize - Size of the sample of data
@@ -80,8 +80,8 @@ class IsolationForest {
       }
     }
 
-    // Error handling: checking the data members to be unique, using lodash methods
-    // Compares based on content not reference
+    // Error handling: checking the data members to be unique 
+    // using lodash methods, compares based on content not reference
     const uniqueArray = _.uniqWith(data, _.isEqual)
     if (uniqueArray.length !== data.length) {
       throw new Error('IsolationForest constructor(): Invalid input, data members must be unique.');
@@ -97,21 +97,21 @@ class IsolationForest {
       throw new Error('IsolationForest constructor(): Invalid input, sample size must be positive integer up to the data size.');
     }
 
-    this.data = data; 
-    this.numberOfTrees = numberOfTrees; 
-    this.sampleSize = sampleSize; 
+    this.data = data;
+    this.numberOfTrees = numberOfTrees;
+    this.sampleSize = sampleSize;
     this.forest = []; // array to store a created collection of isolation trees
 
     // average tree height based on IF algorithms
     // used to stop recursion in the buildTree() method
-    this.heightLimit = Math.ceil(Math.log2(sampleSize)); 
+    this.heightLimit = Math.ceil(Math.log2(sampleSize));
 
-    this.buildForest(); // build the isolation forest
+    this.buildForest(); // build the isolation forest and store it in this.forest array
     this.printForestInfo(); // print info about isolation forest
   }
 
   /**
-   * Print information about the isolation forest
+   * Print information about the isolation forest.
    */
   printForestInfo () {
     console.log('\n===============================================');
@@ -128,7 +128,7 @@ class IsolationForest {
   // >>>>>>>>>>>>> TRAINING PHASE (creating Isolation Forest) <<<<<<<<<<<<<
 
   /**
-   * Build forest (collection of trees) - called by constructor when class is initialized
+   * Build forest (collection of trees) - called by constructor when class is initialized.
    */
   buildForest () {
     for (let i = 0; i < this.numberOfTrees; i++) {
@@ -139,8 +139,8 @@ class IsolationForest {
   }
 
   /**
-   * Sample data - called by buildForest() method
-   * Using lodash method _.sampleSize
+   * Sample data - called by buildForest() method,
+   * using lodash method _.sampleSize.
    * @param {Array} dataToSample - Data to sample
    * @param {number} sizeOfSample - Size of the sample
    * @returns {Array} Sampled data
@@ -150,18 +150,17 @@ class IsolationForest {
   }
 
   /**
-   * Build a tree - called by buildForest() method
+   * Build a tree - called by buildForest() method.
    * @param {Array} treeData - Sampled data subset
    * @param {number} [currentDepth=0] - Current depth of the tree
-   * @returns {*} Built tree
+   * @returns {InternalNode} Built tree
    */
   buildTree (treeData, currentDepth = 0) {
-    // if data cannot be divided further
+    // if data cannot be divided further or height limit is reached
     if (treeData.length <= 1 || currentDepth >= this.heightLimit) {
       return new ExternalNode(treeData.length, currentDepth); // create external (isolated)
     } else {
       currentDepth++;
-
       const numberOfAttributes = treeData[0].length;
       let minValue;
       let maxValue;
@@ -184,7 +183,7 @@ class IsolationForest {
           }
         }
       }
-      while (minValue === maxValue); // if true: find "randomAttribute" and its min/max values again
+      while (minValue === maxValue); // when true: find "randomAttribute" and its min/max values again
 
       // get a random value (split point) of the selected random attribute
       const splitPoint = Math.random() * (maxValue - minValue) + minValue;
@@ -205,8 +204,9 @@ class IsolationForest {
   // >>>>>>>>>>>>> EVALUATION PHASE (evaluating data for anomalies) <<<<<<<<<<<<<
 
   /**
-   * Compute path length for a given data member and a given isolation tree
-   * First call with 2 arguments and default currentPathLength = 0, recursive calls with updated currentPathLength
+   * Compute path length for a given data member and a given isolation tree,
+   * first called with 2 arguments and default currentPathLength = 0, 
+   * recursive calls with updated currentPathLength.
    * @param {Array} dataMember - Data member
    * @param {InternalNode} iTree - Isolation tree
    * @param {number} [currentPathLength=0] - Current path length
@@ -226,7 +226,7 @@ class IsolationForest {
   }
 
   /**
-   * Calculate the c value
+   * Calculate the c value.
    * @param {number} size - Size of the data set or subset
    * @returns {number} Computed c value
    */
@@ -241,8 +241,9 @@ class IsolationForest {
   }
 
   /**
-   * Find desired number of data members with highest anomaly scores across data, orders them and prints info
-   * called by dataAnomalyScore() method
+   * Find desired number of data members with highest anomaly scores across data, 
+   * orders them and prints info, 
+   * called by dataAnomalyScore() method.
    * @param {Array} dataScores - Array with data anomaly scores
    * @param {Array} dataLengths - Array with average data path lengths
    * @param {number} numberOfMaxValues - Number of highest anomaly scores values wanted
@@ -255,7 +256,7 @@ class IsolationForest {
 
     do {
       // ... spread syntax -> to pass array members as individual arguments
-      currentMaxValue = Math.max(...dataScoresCopy); 
+      currentMaxValue = Math.max(...dataScoresCopy);
       currentMaxValueIndex = dataScoresCopy.indexOf(currentMaxValue);
       maxValuesIndexes.push(currentMaxValueIndex);
       dataScoresCopy[currentMaxValueIndex] = -Infinity;
@@ -280,7 +281,7 @@ class IsolationForest {
   }
 
   /**
-   * Calculate average path lengths for all data members over all isolation trees
+   * Calculate average path lengths for all data members over all isolation trees.
    * @returns {Array} Average path lengths for each data member
    */
   dataPathLength () {
@@ -301,13 +302,13 @@ class IsolationForest {
   }
 
   /**
-   * Calculate anomaly score for all data members
-   * If called with numberOfAnomalies > 0, calls maxAnomalyScores() - evaluation of data
+   * Calculate anomaly score for all data members,
+   * if called with numberOfAnomalies > 0, then call maxAnomalyScores() - evaluation of data.
    * @param {number} [numberOfAnomalies=0] - Number of anomalies
    * @returns {Array} Anomaly scores for each data member
    */
   dataAnomalyScore (numberOfAnomalies = 0) {
-    // checking if numberOfAnomalies is an integer greater or equal to 0 and up to the data size
+    // Error handling: checking if numberOfAnomalies is an non negative integer and up to the data size
     if (numberOfAnomalies < 0 || numberOfAnomalies > this.data.length || !Number.isInteger(numberOfAnomalies)) {
       throw new Error('dataAnomalyScore(): Invalid input, number of anomalies must be non-negative integer up to the data size.');
     }
@@ -321,6 +322,7 @@ class IsolationForest {
     for (let i = 0; i < dataAveragePath.length; i++) {
       dataAnomalyScores.push(2 ** (((-1) * dataAveragePath[i]) / cValue));
     }
+    // if numberOfAnomalies > 0, then call maxAnomalyScore() method - evaluation of data
     if (numberOfAnomalies > 0) {
       this.maxAnomalyScores(dataAnomalyScores, dataAveragePath, numberOfAnomalies);
     }
@@ -330,8 +332,8 @@ class IsolationForest {
   // >>>>>>>>>>>>> VISUALIZATION <<<<<<<<<<<<<
 
   /**
-   * Build graph, using graphviz methods
-   * Called by exportTree() method
+   * Build graph, using graphviz methods,
+   * called by exportTree() method.
    * @param {*} graph - Graphviz graph
    * @param {InternalNode} treeNode - Root node of the tree
    * @param {number} [nodeIdCounter=0] - Default nodeIdCounter set to zero
@@ -341,7 +343,7 @@ class IsolationForest {
     // helper function to recursively traverse the tree and build the graph
     function recursiveBuild (treeNode) {
       if (treeNode instanceof InternalNode) {
-        const internalNodeId = nodeIdCounter++; // assign id to internal node
+        const internalNodeId = nodeIdCounter++; // assign ID to internal node
 
         const internalNode = graph.addNode(internalNodeId.toString()); // add internal node to the graph
 
@@ -357,9 +359,9 @@ class IsolationForest {
         graph.addEdge(internalNodeId.toString(), leftNodeId.toString());
         graph.addEdge(internalNodeId.toString(), rightNodeId.toString());
 
-        return internalNodeId // return internal node id
+        return internalNodeId // return internal node ID
       } else if (treeNode instanceof ExternalNode) {
-        const externalNodeId = nodeIdCounter++; // assign id to external node
+        const externalNodeId = nodeIdCounter++; // assign ID to external node
 
         const externalNode = graph.addNode(externalNodeId.toString()) // add external node to graph
 
@@ -368,21 +370,20 @@ class IsolationForest {
         externalNode.set('shape', 'box');
         externalNode.set('penwidth', 3.0); // default 1.0, minimum 0.0
 
-        return externalNodeId; // return external node id
+        return externalNodeId; // return external node ID
       }
     }
-    return recursiveBuild(treeNode); // start the recursive travesal of the tree by calling helper function
+    return recursiveBuild(treeNode); // start the tree travesal by calling helper function
   }
 
   /**
-   * Export a given tree, produce a file
+   * Export a given tree, produce a file.
    * @param {InternalNode} treeToExport - Tree to export
    * @param {string} exportFormat - Format of the exported file
-   * @param {string} fileName - Name of the output file
+   * @param {string} fileName - Name of the output file - can include folder name ("img/tree")
    * @param {boolean} [exportInfo=true] - Indicates whether to print export info
    */
   exportTree (treeToExport, exportFormat, fileName, exportInfo = true) {
-
     // Error handling: checking tree on input to be a tree (has InternalNode as constructor)
     if (treeToExport === undefined || treeToExport.constructor !== InternalNode) {
       throw new Error('exportTree(): Invalid input, tree for export must be an IF tree, within the boundaries of the forest array.');
@@ -417,22 +418,19 @@ class IsolationForest {
     // output the graph through graphviz output() method
     exportGraph.output(lowerCaseFormat, fileNameWithExtention);
 
-    // if exportInfo === true (method not called by exportForest()), print info a about tree export
+    // if exportInfo === true (method not called by exportForest()), then print info a about tree export
     if (exportInfo) {
       console.log('\n   Exported a tree into ' + fileNameWithExtention + ' file.\n');
     }
   }
 
-
   /**
-   * Export entire forest
-   * Produce a file for each tree, file name includes index of the tree
+   * Export entire forest,
+   * produce a file for each tree, file name includes index of the tree.
    * @param {string} forestExportFormat - Format of the exported file
    * @param {string} fileName - Name of the output file, can include folder name ("img/forest")
-   * @param {boolean} [exportInfo=true] - Indicates whether to print export info
    */
   exportForest (forestExportFormat, fileName) {
-    
     // Error handling: checking forestExportFormat to be a string
     if (typeof forestExportFormat !== 'string') {
       throw new Error('exportForest: Invalid input, output format must be a string and one of the Graphviz supported formats.');
@@ -459,5 +457,5 @@ class IsolationForest {
 // exporting classes
 module.exports = {
   IsolationForest,
-  ExternalNode,
+  ExternalNode
 }
