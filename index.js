@@ -2,9 +2,9 @@
  * This library requires npm packages 
  * {@link https://www.npmjs.com/package/lodash|lodash} and 
  * {@link https://www.npmjs.com/package/graphviz|graphviz}
+ * To install required packages run: "npm install graphviz" and "npm install lodash"
  * @requires lodash
  * @requires graphviz
- * to install required packages run: "npm install graphviz" and "npm install lodash"
  */
 
 // import lodash
@@ -330,7 +330,7 @@ class IsolationForest {
   // >>>>>>>>>>>>> VISUALIZATION <<<<<<<<<<<<<
 
   /**
-   * Build graph using npm graphviz
+   * Build graph, using graphviz methods
    * Called by exportTree() method
    * @param {*} graph - Graphviz graph
    * @param {InternalNode} treeNode - Root node of the tree
@@ -374,29 +374,31 @@ class IsolationForest {
     return recursiveBuild(treeNode); // start the recursive travesal of the tree by calling helper function
   }
 
-  // export a given tree using inputs: format and file name
-  // produce a file
+  /**
+   * Export a given tree, produce a file
+   * @param {InternalNode} treeToExport - Tree to export
+   * @param {string} exportFormat - Format of the exported file
+   * @param {string} fileName - Name of the output file
+   * @param {boolean} [exportInfo=true] - Indicates whether to print export info
+   */
   exportTree (treeToExport, exportFormat, fileName, exportInfo = true) {
-  // ?? change it so you enter myForest and 0, instead  of myForest.forest[0] ???
 
-    // checking if tree on input is a tree (has InternalNode as constructor and is in the forest array)
-    // is it undefined? (catches out of boundaries of forest array)
-    // is it not constructed with InternalNode (catches random inputs like strings and numbers)
+    // Error handling: checking tree on input to be a tree (has InternalNode as constructor)
     if (treeToExport === undefined || treeToExport.constructor !== InternalNode) {
       throw new Error('exportTree(): Invalid input, tree for export must be an IF tree, within the boundaries of the forest array.');
     }
 
-    // checking if exportFormat is a string
+    // Error handling: checking exportFormat to be a string
     if (typeof exportFormat !== 'string') {
       throw new Error('exportTree(): Invalid input, output format must be a string and one of the Graphviz supported formats.');
     }
 
-    // checking if fileName is a string
+    // Error handling: checking fileName to be a string
     if (typeof fileName !== 'string') {
       throw new Error('exportTree(): Invalid input, name of output file must be a string.');
     }
 
-    // checking if exportInfo is a boolean
+    // Error handling: checking exportInfo to be a boolean
     if (typeof exportInfo !== 'boolean') {
       throw new Error('exportTree(): Invalid input, exportInfo must be a boolean.');
     }
@@ -404,55 +406,58 @@ class IsolationForest {
     // create a new graph using npm graphviz
     const exportGraph = graphviz.digraph('G');
 
-    // in case user used capitals for format
     const lowerCaseFormat = exportFormat.toLowerCase();
 
-    // call a helper function to recursively build the graph
+    // call a helper method to recursively build the graph
     this.buildGraph(exportGraph, treeToExport);
 
     // build the whole file name => add the file name and extension
-    // say in documentation that path is case sensitive
     const fileNameWithExtention = fileName + '.' + lowerCaseFormat;
 
-    // output the graph through npm graphviz
+    // output the graph through graphviz output() method
     exportGraph.output(lowerCaseFormat, fileNameWithExtention);
 
-    // if inputs will be changed, print also number of the tree exported
-    // print to the console that a tree was exported into what format (true if exportTree not called by exportForest() )
+    // if exportInfo === true (method not called by exportForest()), print info a about tree export
     if (exportInfo) {
       console.log('\n   Exported a tree into ' + fileNameWithExtention + ' file.\n');
     }
   }
 
-  // exports the whole forest at once
-  // produces a file for each isolation tree using the "exportTree" method
-  // input file name can include the existing folder in the project folder ("img/exampleName")
+
+  /**
+   * Export entire forest
+   * Produce a file for each tree, file name includes index of the tree
+   * @param {string} forestExportFormat - Format of the exported file
+   * @param {string} fileName - Name of the output file, can include folder name ("img/forest")
+   * @param {boolean} [exportInfo=true] - Indicates whether to print export info
+   */
   exportForest (forestExportFormat, fileName) {
-    // make accepted formats a class variable for both exportTree and exportForest ???
-    // checking if forestExported format is string
+    
+    // Error handling: checking forestExportFormat to be a string
     if (typeof forestExportFormat !== 'string') {
       throw new Error('exportForest: Invalid input, output format must be a string and one of the Graphviz supported formats.');
     }
 
-    // checking if fileName is a string
+    // Error handling: checking fileName to be a string
     if (typeof fileName !== 'string') {
       throw new Error('exportForest(): Invalid input, name of output file must be a string.');
     }
 
     // loops through the isolation trees and exports them
     for (let i = 0; i < this.forest.length; i++) {
-      // adds the index of the tree (from the "this.forest" array) as part of the file name
+      // adds the index of the tree (from the "this.forest" array) to the file name
       const treeFileName = fileName + i.toString();
 
-      // calls the "exportTree" method for each tree
-      this.exportTree(this.forest[i], forestExportFormat, treeFileName, false); // false for not printing the info about each of many exported trees
+      // calls the "exportTree()" method for each tree
+      this.exportTree(this.forest[i], forestExportFormat, treeFileName, false); // false to not print the info about each of many exported trees
     }
-    console.log('\n   Exported Isolation Forest into "' + forestExportFormat + '" format.\n'); // prints what format the IF was exported into
+    // prints what format the IF was exported into
+    console.log('\n   Exported Isolation Forest into "' + forestExportFormat + '" format.\n');
   }
 } // end of IsolationForest class
 
 // exporting classes
 module.exports = {
   IsolationForest,
-  ExternalNode
+  ExternalNode,
 }
