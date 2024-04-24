@@ -71,13 +71,10 @@ class IsolationForest {
       throw new Error('IsolationForest constructor(): Invalid input, data must be non-empty array of arrays.');
     }
 
-    // Error handling: checking the data members to be arrays of the same size
+    // Error handling: checking the data members to be arrays of the same size, using lodash method _.some
     const expectedDataDimension = data[0].length
-    for (let i = 1; i < data.length; i++) {
-      // check if data members are all the same dimension
-      if (!Array.isArray(data[i]) || data[i].length !== expectedDataDimension) {
-        throw new Error('IsolationForest constructor(): Invalid input, all data members must be arrays of the same dimension.'); //
-      }
+    if (_.some(data, (x) => {return x.length != expectedDataDimension})) {
+      throw new Error('IsolationForest constructor(): Invalid input, all data members must be arrays of the same dimension.'); //
     }
 
     // Error handling: checking the data members to be unique 
