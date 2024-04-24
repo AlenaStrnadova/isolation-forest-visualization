@@ -164,21 +164,12 @@ class IsolationForest {
       let randomAttribute;
 
       do {
-        minValue = Infinity;
-        maxValue = -Infinity;
-
         // get a random attribute
         randomAttribute = Math.floor(Math.random() * numberOfAttributes);
 
-        // get the minValue and maxValue values of the selected attribute
-        for (let i = 0; i < treeData.length; i++) {
-          if (treeData[i][randomAttribute] < minValue) {
-            minValue = treeData[i][randomAttribute];
-          }
-          if (treeData[i][randomAttribute] > maxValue) {
-            maxValue = treeData[i][randomAttribute];
-          }
-        }
+        // find min and max values of given attribute, using lodash methods _.minBy and _.maxBy
+        minValue = _.minBy(treeData, dataMember => dataMember[randomAttribute])[randomAttribute];
+        maxValue = _.maxBy(treeData, dataMember => dataMember[randomAttribute])[randomAttribute];
       }
       while (minValue === maxValue); // when true: find "randomAttribute" and its min/max values again
 

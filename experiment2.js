@@ -1,5 +1,5 @@
 // demonstration file, exporting a tree and evaluating data
-// data size 256, sample size 100
+// data size 256, sample size 180
 
 const { IsolationForest } = require('./index');
 
@@ -71,7 +71,7 @@ const inputData =
   [1.31, 2.89], [3.47, 2.98], [2.64, 2.36], [2.74, 2.97]]
 
 const myNumberOfTrees = 100;
-const mySampleSize = 100;
+const mySampleSize = 180;
 
 // inicializing IsolationForest
 const myForest = new IsolationForest(inputData, myNumberOfTrees, mySampleSize);
