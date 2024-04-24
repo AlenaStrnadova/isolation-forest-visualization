@@ -237,7 +237,7 @@ class IsolationForest {
    * @param {number} numberOfMaxValues - Number of highest anomaly scores values wanted
    */
   maxAnomalyScores (dataScores, dataLengths, numberOfMaxValues) {
-    // create shallow copy of array, changing copy does not change original the original array
+    // create shallow copy of array, changing copy does not change the original array
     const dataScoresCopy = [...dataScores];
     const maxValuesIndexes = [];
     let currentMaxValue, currentMaxValueIndex;
