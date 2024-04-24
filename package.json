@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "graphviz": "^0.0.9",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdoc": "^4.0.2",
+    "standard": "^17.1.0"
+  },
+  "scripts": {
+     "test": "jest"
+  }
+}
