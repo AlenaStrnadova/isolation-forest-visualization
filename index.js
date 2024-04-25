@@ -155,7 +155,7 @@ class IsolationForest {
   buildTree (treeData, currentDepth = 0) {
     // if data cannot be divided further or height limit is reached
     if (treeData.length <= 1 || currentDepth >= this.heightLimit) {
-      return new ExternalNode(treeData.length, currentDepth); // create external (isolated)
+      return new ExternalNode(treeData.length, currentDepth); // create external node
     } else {
       currentDepth++;
       const numberOfAttributes = treeData[0].length;
