@@ -445,5 +445,6 @@ class IsolationForest {
 // exporting classes
 module.exports = {
   IsolationForest,
+  InternalNode,
   ExternalNode
 }
