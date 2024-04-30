@@ -319,12 +319,26 @@ describe("Isolation Forest - testing methods calling each other", () => {
         const sampleSpy = jest.spyOn(IsolationForest.prototype, 'sample');
         const buildTreeSpy = jest.spyOn(IsolationForest.prototype, 'buildTree');
         const printForestInfoSpy = jest.spyOn(IsolationForest.prototype, 'printForestInfo');
+        const consoleSpy = jest.spyOn(console, 'log');
         
         myForest = new IsolationForest(testingData, testingNumberOfTrees, testingSampleSize);
         
+        expect(buildForestSpy).toHaveBeenCalledTimes(1);
+        expect(sampleSpy).toHaveBeenCalledTimes(testingNumberOfTrees);
+        expect(sampleSpy).toHaveBeenCalledWith(expect.any(Array), expect.any(Number));
         expect(buildTreeSpy).toHaveBeenCalled();
         expect(buildTreeSpy).toHaveBeenCalledWith(expect.any(Array));
-        expect(printForestInfoSpy).toHaveBeenCalled();
+        expect(printForestInfoSpy).toHaveBeenCalledTimes(1);
+        expect(consoleSpy).toHaveBeenCalledWith("\n===============================================");
+        expect(consoleSpy).toHaveBeenCalledWith("   data size: 16, number of attributes: 2");
+        expect(consoleSpy).toHaveBeenCalledWith("-----------------------------------------------");
+        expect(consoleSpy).toHaveBeenCalledWith("   number of trees: 3, sample size: 6");
+        expect(consoleSpy).toHaveBeenCalledWith("-----------------------------------------------");
+        expect(consoleSpy).toHaveBeenCalledWith("   height limit of trees set to: 3");
+        expect(consoleSpy).toHaveBeenCalledWith("-----------------------------------------------");
+        expect(consoleSpy).toHaveBeenCalledWith("   >>>    ISOLATION FOREST CREATED    <<<");
+        expect(consoleSpy).toHaveBeenCalledWith("===============================================\n");
+
     });
     
     test("methods get called when exportForest method is called", () => {
@@ -402,7 +416,7 @@ describe("Isolation Forest - testing pathLength method", () => {
     const ext15 = new ExternalNode(1, 6);
     const ext16 = new ExternalNode(1, 6);
 
-    // internal nodes
+    // internal nodes - connected to their child nodes
     const int15 = new InternalNode(ext15, ext16, 0, 2.5, 2);
     const int14 = new InternalNode(ext13, ext14, 1, 2.6, 2);
     const int13 = new InternalNode(int15, ext12, 1, 2.1, 3);
