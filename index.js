@@ -374,7 +374,7 @@ class IsolationForest {
   exportTree (treeToExport, exportFormat, fileName, exportInfo = true) {
     // Error handling: checking tree on input to be a tree (has InternalNode as constructor)
     if (treeToExport === undefined || treeToExport.constructor !== InternalNode) {
-      throw new Error('exportTree(): Invalid input, tree for export must be an IF tree, within the boundaries of the forest array.');
+      throw new Error('exportTree(): Invalid input, tree for export must be an IF tree.');
     }
 
     // Error handling: checking exportFormat to be a string

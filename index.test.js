@@ -311,7 +311,7 @@ describe("Isolation Forest - testing methods calling each other", () => {
     });
 
 
-    // testing calling the methods by constructor
+    // calling the methods by constructor
     test("methods get called during IsolationForest initialisation", () => {
         
         // Spy on the methods
@@ -379,3 +379,81 @@ describe("Isolation Forest - testing methods calling each other", () => {
     });
 });
 
+
+describe("Isolation Forest - testing pathLength method", () => {
+
+    // creating test tree, fully isolated tree from 16 size data, 15 internal and 16 external nodes
+
+    // external nodes
+    const ext1 = new ExternalNode(1, 2);
+    const ext2 = new ExternalNode(1, 3);
+    const ext3 = new ExternalNode(1, 4);
+    const ext4 = new ExternalNode(1, 4);
+    const ext5 = new ExternalNode(1, 4);
+    const ext6 = new ExternalNode(1, 4);
+    const ext7 = new ExternalNode(1, 4);
+    const ext8 = new ExternalNode(1, 4);
+    const ext9 = new ExternalNode(1, 4);
+    const ext10 = new ExternalNode(1, 5);
+    const ext11 = new ExternalNode(1, 5);
+    const ext12 = new ExternalNode(1, 5);
+    const ext13 = new ExternalNode(1, 5);
+    const ext14 = new ExternalNode(1, 5);
+    const ext15 = new ExternalNode(1, 6);
+    const ext16 = new ExternalNode(1, 6);
+
+    // internal nodes
+    const int15 = new InternalNode(ext15, ext16, 0, 2.5, 2);
+    const int14 = new InternalNode(ext13, ext14, 1, 2.6, 2);
+    const int13 = new InternalNode(int15, ext12, 1, 2.1, 3);
+    const int12 = new InternalNode(ext10, ext11, 1, 2.2, 2);
+    const int11 = new InternalNode(ext9, int14, 0, 2.2, 3);
+    const int9 = new InternalNode(ext7, ext8, 0, 2.3, 2);
+    const int10 = new InternalNode(int12, int13, 0, 2, 5);
+    const int8 = new InternalNode(ext5, ext6, 0, 1.5, 2);
+    const int7 = new InternalNode(ext3, ext4, 0, 1.6, 2);
+    const int6 = new InternalNode(int10, int11, 1, 2.3, 8);
+    const int5 = new InternalNode(ext2, int9, 1, 1.4, 3);
+    const int4 = new InternalNode(int7, int8, 1, 1.6, 4);
+    const int3 = new InternalNode(int6, ext1, 0, 3, 9);
+    const int2 = new InternalNode(int4, int5, 0, 1.8, 7);
+
+    // root node of the testing tree
+    const testingTree = new InternalNode(int2, int3, 1, 1.8, 16); 
+    
+    let myForest;
+
+    const testingData = [
+        [4.5, 2.25], [1.75, 1.5], [1.75, 2], [1.75, 1.75], 
+        [2.25, 2], [2.25, 2.25], [1.75, 2.5], [1.5, 2.25], 
+        [1.25, 1.75], [1.5, 1.5], [2, 1.25], [2.25, 1.5], 
+        [2.5, 1.75], [2.75, 2], [2.5, 2.5], [2.25, 2.75], 
+    ];
+
+
+    const testingNumberOfTrees = 1;
+    const testingSampleSize = 16;
+
+    myForest = new IsolationForest(testingData, testingNumberOfTrees, testingSampleSize);
+    
+    // visually compare the exported tree to expected output
+    myForest.exportTree(testingTree, "png", "img/testingTreeExport");
+
+    // testing pathLength method to return correct values, 
+    //using testingTree (hand made tree) to be able to predict the results
+    test("pathLength method returning correct values", () => {
+        
+
+        expect(myForest.pathLength([4.5, 2.25], testingTree)).toBe(2);  
+        expect(myForest.pathLength([1.75, 1.75], testingTree)).toBe(4);  
+        expect(myForest.pathLength([2.75, 2], testingTree)).toBe(6);  
+        expect(myForest.pathLength([2.1, 2.0], testingTree)).toBe(6);  
+        expect(myForest.pathLength([0, 0], testingTree)).toBe(4);  
+        expect(myForest.pathLength([100, 100], testingTree)).toBe(2);  
+        expect(myForest.pathLength([0, 100], testingTree)).toBe(4);
+        expect(myForest.pathLength([-1, -1], testingTree)).toBe(4);  
+          
+    });
+    
+   
+});
