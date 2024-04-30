@@ -393,7 +393,6 @@ describe("Isolation Forest - testing methods calling each other", () => {
     });
 });
 
-
 describe("Isolation Forest - testing pathLength method", () => {
 
     // creating test tree, fully isolated tree from 16 size data, 15 internal and 16 external nodes
