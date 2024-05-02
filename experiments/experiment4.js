@@ -1,7 +1,7 @@
 // demonstration file, printing path lengths and anomaly score of the whole data set - custom version of info
 // data size 4, sample size 4
 
-const { IsolationForest } = require('./index');
+const { IsolationForest } = require('../index');
 
 // data with no anomaly
 const inputData = [[3, 1], [5, 2], [4, 4], [2, 3]];

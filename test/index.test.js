@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const fs = require('fs');
 const graphviz = require('graphviz');
-const {IsolationForest, InternalNode, ExternalNode} = require("./index");
+const {IsolationForest, InternalNode, ExternalNode} = require("../index");
 
 describe("Isolation Forest - testing initialisation based on input", () => {
     let myForest;

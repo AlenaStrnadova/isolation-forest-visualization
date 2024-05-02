@@ -1,7 +1,7 @@
 // demonstration file, exporting a tree and the whole forest
 // data size 16, sample size 10
 
-const { IsolationForest } = require('./index');
+const { IsolationForest } = require('../index');
 
 // data member on index 0 is an anomaly
 const inputData = [[4.5, 2.25], [1.75, 1.5], [1.75, 2], [1.75, 1.75],

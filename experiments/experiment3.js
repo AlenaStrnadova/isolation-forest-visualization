@@ -1,7 +1,7 @@
 // demonstration file, exporting a tree, evaluating data
 // data size 10, sample size 4
 
-const { IsolationForest } = require('./index');
+const { IsolationForest } = require('../index');
 
 // data with 4 parametres
 // data member on index 0 is most probable anomaly
