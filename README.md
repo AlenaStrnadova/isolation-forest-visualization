@@ -6,8 +6,12 @@
 
 ## Installation
 
-Before using the library, make sure you have installed [Node.js](https://nodejs.org/en/download) and [Graphviz](https://graphviz.org/download/)
-properly based on your operating system.
+Before installing and using the library, make sure you have installed [Node.js](https://nodejs.org/en/download) and [Graphviz](https://graphviz.org/download/) properly, based on your operating system.
+
+Installation of the _npm_ package:
+```bash
+npm install isolation-forest-visualization
+```
 
 ## Usage
 
@@ -30,13 +34,13 @@ const sampleSize = 256; // Size of the sample of data
 
 const myForest = new IsolationForest(data, numberOfTrees, sampleSize);
 ```
-**note:** the data should be array of arrays, all data members (inner arrays) must be of the same length and must be unique. 
+**Note:** the data should be array of arrays, all data members (inner arrays) must be of the same length and must be unique. 
 
 ### Methods
 
 ### `dataPathLength()`
 
-Calculate the average path length for each data member over all isolation trees.
+Calculate the average path length for each data member over all isolation trees and save them into a variable.
 
 ```javascript
 const averagePathLengths = myForest.dataPathLength();
@@ -44,14 +48,14 @@ const averagePathLengths = myForest.dataPathLength();
 
 ### `dataAnomalyScore()`
 
-Calculate the anomaly score for each data member.
+Calculate the anomaly score for each data member and save them into a variable.
 
 ```javascript
-const anomalyScores = myForest.dataAnomalyScore(numberOfAnomalies);
+const anomalyScores = myForest.dataAnomalyScore();
 ```
 ### `dataAnomalyScore(numberOfAnomalies) - using optional parameter`
 
-Calculate the anomaly score for each data member. If `numberOfAnomalies` is provided, it also prints information about the top anomalies.
+Calculate the anomaly score for each data member and save them into a variable. If `numberOfAnomalies` is provided, it also prints information about the top anomalies.
 
 ```javascript
 const numberOfAnomalies = 5; // Number of anomalies to display
@@ -66,13 +70,13 @@ Export a single tree from the forest as an image file. In the `IsolationForest` 
 const treeToExport = myForest.forest[0];   // tree to export
 const exportFormat = 'png'; // Output format (e.g., png, svg, pdf)
 const fileName = 'tree'; // Output file name (without extension)
-isolationForest.exportTree(treeToExport, exportFormat, fileName);
+myForest.exportTree(treeToExport, exportFormat, fileName);
 ```
-**note:** export format and file name are strings, file name can be given including a name of an existing folder (`"img/tree"`). Export format can be a supported format of the Graphviz software (e.g. `png, pdf, dot, jpg, svg`).
+**Note:** export format and file name are strings, file name can be provided including a name of an existing folder (`"img/tree"`). Export format can be a supported format of the Graphviz software (e.g. `png, pdf, dot, jpg, svg`).
 
 ### `exportForest(forestExportFormat, fileName)`
 
-Export the entire forest as image files, one for each tree. The rules for export format and file name are the same as for `exportTree` method. The name of the exported file will include the index of the tree from the `forest` array (e.g. `"forestExport1.png"`).
+Export the entire forest as image files, one for each tree. The rules for export format and file name are the same as for `exportTree` method. The name of the exported file will include the index of the tree from the `forest` array (e.g. `"forestExport0.png"`).
 
 ```javascript
 const forestExportFormat = 'png'; // Output format (e.g., png, svg, pdf)
@@ -80,7 +84,7 @@ const fileName = 'forestExport'; // Output file name (without extension, index w
 myForest.exportForest(forestExportFormat, fileName);
 ```
 
-### Example
+## Example
 
 An example of how to use the `isolation-forest-visualization` library:
 
