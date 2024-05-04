@@ -94,16 +94,16 @@ const data = [[1, 2], [3, 4], [5, 6], [7, 8]];
 const myForest = new IsolationForest(data, 5, 2);
 
 // calculate average path lengths all data
-const pathLengths = isolationForest.dataPathLength;
+const pathLengths = myForest.dataPathLength;
 
 // calculate anomaly scores for all data, show 2 top anomalies in the console
-const anomalyScores = isolationForest.dataAnomalyScore(2);
+const anomalyScores = myForest.dataAnomalyScore(2);
 
 // export the tree on index 0
-myForest.exportTree(myForest.forest[0], 'png', 'forest/tree');
+myForest.exportTree(myForest.forest[0], 'png', 'tree');
 
 // export the forest
-myForest.exportForest('png', 'forest/tree');
+myForest.exportForest('png', 'forestExport');
 ```
 
 This example creates an Isolation Forest with sample data, calculates average path lengths and anomaly scores for all data, displays top 2 anomalies in the console, exports the tree on index 0 and then the entire forest as image files.
