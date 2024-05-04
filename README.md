@@ -28,9 +28,9 @@ const { IsolationForest } = require('isolation-forest-visualization');
 2. Instantiate the `IsolationForest` class with the desired parameters:
 
 ```javascript
-const data = [[7, 3], [2, 5], [3, 4] ...]; // Your data
-const numberOfTrees = 100; // Number of trees in the forest
-const sampleSize = 256; // Size of the sample of data
+const data = [[7, 3], [2, 5], [3, 4]]; // data to analyze
+const numberOfTrees = 100; // number of trees in the forest
+const sampleSize = 256; // sample size
 
 const myForest = new IsolationForest(data, numberOfTrees, sampleSize);
 ```
@@ -63,9 +63,9 @@ const anomalyScores = myForest.dataAnomalyScore();
 Calculate the anomaly score for each data member (returns an array). If `numberOfAnomalies` is provided, it also prints information about the top anomalies. 
 
 ```javascript
-const numberOfAnomalies = 5; // Number of anomalies to display
+const numberOfAnomalies = 5; // number of anomalies to display
 const anomalyScores = myForest.dataAnomalyScore(numberOfAnomalies);
-myForest.dataAnomalyScore(numberOfAnomalies); // just printing info 
+myForest.dataAnomalyScore(numberOfAnomalies); // just print info 
 ```
 
 
@@ -75,8 +75,8 @@ Export a single tree from the forest as an image file. In the `IsolationForest` 
 
 ```javascript
 const treeToExport = myForest.forest[0];   // tree to export
-const exportFormat = 'png'; // Output format (e.g., png, svg, pdf)
-const fileName = 'tree'; // Output file name (without extension)
+const exportFormat = 'png'; // output format (e.g., png, svg, pdf)
+const fileName = 'tree'; // output file name (without extension)
 myForest.exportTree(treeToExport, exportFormat, fileName);
 ```
 **Note:** export format and file name are strings, file name can be provided including a name of an existing folder (`"img/tree"`). Export format can be a supported format of the Graphviz software (e.g. `png, pdf, dot, jpg, svg`).
@@ -88,8 +88,8 @@ myForest.exportTree(treeToExport, exportFormat, fileName);
 Export the entire forest as image files, one for each tree. The rules for export format and file name are the same as for `exportTree` method. The name of the exported file will include the index of the tree from the `forest` array (e.g. `"forestExport0.png"`).
 
 ```javascript
-const forestExportFormat = 'png'; // Output format (e.g., png, svg, pdf)
-const fileName = 'forestExport'; // Output file name (without extension, index will be appended)
+const forestExportFormat = 'png'; // output format (e.g., png, svg, pdf)
+const fileName = 'forestExport'; // output file name (without extension, index will be appended)
 myForest.exportForest(forestExportFormat, fileName);
 ```
 
