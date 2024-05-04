@@ -2,7 +2,6 @@
  * This library requires npm packages
  * {@link https://www.npmjs.com/package/lodash|lodash} and
  * {@link https://www.npmjs.com/package/graphviz|graphviz}
- * To install required packages run: "npm install graphviz" and "npm install lodash"
  * @requires lodash
  * @requires graphviz
  */
