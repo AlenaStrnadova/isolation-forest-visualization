@@ -1,4 +1,4 @@
-# isolation-forest-visualization Library
+# isolation-forest-visualization
 
 ## Overview
 
