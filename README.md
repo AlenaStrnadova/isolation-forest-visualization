@@ -121,3 +121,6 @@ myForest.exportForest('png', 'forestExport');
 
 This example creates an Isolation Forest with sample data, calculates average path lengths and anomaly scores for all data, displays top 2 anomalies in the console, exports the tree on index 0 and then the entire forest as image files.
 
+## Example of exported image
+
+![Demo Image](img/demo1.png)
