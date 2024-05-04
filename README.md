@@ -40,7 +40,7 @@ const myForest = new IsolationForest(data, numberOfTrees, sampleSize);
 
 #### `dataPathLength()`
 
-Calculate the average path length for each data member over all isolation trees and save them into a variable.
+Calculate the average path length for each data member over all isolation trees (returns an array). In the example below they saved into a variable `averagePathLengths`.
 
 ```javascript
 const averagePathLengths = myForest.dataPathLength();
@@ -49,7 +49,7 @@ const averagePathLengths = myForest.dataPathLength();
 
 #### `dataAnomalyScore()`
 
-Calculate the anomaly score for each data member and save them into a variable.
+Calculate the anomaly score for each data member (returns an array). In the example below they are saved into a variable `anomalyScores`.
 
 ```javascript
 const anomalyScores = myForest.dataAnomalyScore();
@@ -58,13 +58,14 @@ const anomalyScores = myForest.dataAnomalyScore();
 
 #### `dataAnomalyScore(numberOfAnomalies)`
 
-##### (using optional parameter to display anomalies)
+##### (using optional parameter to display top anomalies)
 
-Calculate the anomaly score for each data member and save them into a variable. If `numberOfAnomalies` is provided, it also prints information about the top anomalies.
+Calculate the anomaly score for each data member (returns an array). If `numberOfAnomalies` is provided, it also prints information about the top anomalies. 
 
 ```javascript
 const numberOfAnomalies = 5; // Number of anomalies to display
 const anomalyScores = myForest.dataAnomalyScore(numberOfAnomalies);
+myForest.dataAnomalyScore(numberOfAnomalies); // just printing info 
 ```
 
 
