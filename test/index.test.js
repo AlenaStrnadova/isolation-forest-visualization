@@ -155,7 +155,7 @@ describe("Isolation Forest - testing methods", () => {
           });
     });
 
-    // returned arrays ordered by highest score/longest path => same order?
+    // returned arrays ordered by highest score/shortest path => same order?
     test("dataPathLength and dataAnomalyScore methods, compare ordered arrays", () => {
         const pathLengths = myForest.dataPathLength();
         const anomalyScores = myForest.dataAnomalyScore();
@@ -261,7 +261,7 @@ describe("Isolation Forest - testing evaluation of data", () => {
         myForest = new IsolationForest(testingData, testingNumberOfTrees, testingSampleSize);
     });
 
-    // larger data, returned arrays ordered by highest score/longest path => same order?
+    // larger data, returned arrays ordered by highest score/shortest path => same order?
     test("dataPathLength and dataAnomalyScore methods, compare ordered arrays on larger data", () => {
         const pathLengths = myForest.dataPathLength();
         const anomalyScores = myForest.dataAnomalyScore();
