@@ -43,7 +43,7 @@ describe("Isolation Forest - testing initialisation based on input", () => {
     // loop through all trees in the forest
     test("root node of a tree should be an instance of class InternalNode", () => {
         for (let i = 0; i < myForest.forest.length; i++) {
-            expect(myForest.forest[0].constructor.name).toBe("InternalNode");
+            expect(myForest.forest[i].constructor.name).toBe("InternalNode");
         }    
     });
 
@@ -61,7 +61,7 @@ describe("Isolation Forest - testing initialisation based on input", () => {
             internalNodeSizeTest(treeNode.right);
         };
         for (let i = 0; i < myForest.forest.length; i++) {
-            internalNodeSizeTest(myForest.forest[0]);
+            internalNodeSizeTest(myForest.forest[i]);
         }
     });
 
@@ -79,7 +79,7 @@ describe("Isolation Forest - testing initialisation based on input", () => {
             return sizeCounter;
         };
         for (let i = 0; i < myForest.forest.length; i++) {
-            expect(externalNodeSizeTest(myForest.forest[0])).toBe(myForest.sampleSize);
+            expect(externalNodeSizeTest(myForest.forest[i])).toBe(myForest.sampleSize);
             sizeCounter = 0;    // reset the counter
         }
     });
