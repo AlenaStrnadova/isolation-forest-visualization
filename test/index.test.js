@@ -40,12 +40,14 @@ describe("Isolation Forest - testing initialisation based on input", () => {
     });
 
 
-    // loop through all trees?
+    // loop through all trees in the forest
     test("root node of a tree should be an instance of class InternalNode", () => {
-        expect(myForest.forest[0].constructor.name).toBe("InternalNode");
+        for (let i = 0; i < myForest.forest.length; i++) {
+            expect(myForest.forest[0].constructor.name).toBe("InternalNode");
+        }    
     });
 
-    // loop through all trees?
+    // loop through all trees in the forest
     test("for each internal node, its size should be equal to sum of its child node sizes", () => {
         const internalNodeSizeTest = (treeNode) => 
         {
@@ -58,10 +60,12 @@ describe("Isolation Forest - testing initialisation based on input", () => {
             internalNodeSizeTest(treeNode.left);
             internalNodeSizeTest(treeNode.right);
         };
-        internalNodeSizeTest(myForest.forest[0]);
+        for (let i = 0; i < myForest.forest.length; i++) {
+            internalNodeSizeTest(myForest.forest[0]);
+        }
     });
 
-    // loop through all trees?
+    // loop through all trees in the forest
     test("sum of sizes of all external nodes in a tree should be equal to sampleSize", () => {
         let sizeCounter = 0;
         const externalNodeSizeTest = (treeNode) => 
@@ -74,8 +78,10 @@ describe("Isolation Forest - testing initialisation based on input", () => {
             externalNodeSizeTest(treeNode.right);
             return sizeCounter;
         };
-        
-        expect(externalNodeSizeTest(myForest.forest[0])).toBe(myForest.sampleSize);
+        for (let i = 0; i < myForest.forest.length; i++) {
+            expect(externalNodeSizeTest(myForest.forest[0])).toBe(myForest.sampleSize);
+            sizeCounter = 0;    // reset the counter
+        }
     });
 
     test("heightLimit class variable should be equal to Math.ceil(Math.log2(testingSampleSize))", () => {
