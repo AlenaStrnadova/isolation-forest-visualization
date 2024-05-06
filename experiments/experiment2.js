@@ -81,3 +81,4 @@ myForest.exportTree(myForest.forest[0], 'png', 'img/treeExperiment2');
 
 // evaluating data, asking for 5 most probable anomalies
 myForest.dataAnomalyScore(5);
+

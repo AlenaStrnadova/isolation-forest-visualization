@@ -43,7 +43,14 @@ myForest.exportTree(myForest.forest[0], 'svg', 'img/exportExperiment');
 myForest.exportTree(myForest.forest[0], 'tif', 'img/exportExperiment');
 
 
-// exporting all trees in myForest, index of each tree is added to the file name
-//myForest.exportForest('png', 'img/forestExperiment');
+// exporting all trees in myForest into different formats
+myForest.exportForest('png', 'img/forestExportExperiment');
+myForest.exportForest('bmp', 'img/forestExportExperiment');
+myForest.exportForest('dot', 'img/forestExportExperiment');
+myForest.exportForest('gif', 'img/forestExportExperiment');
+myForest.exportForest('jpeg', 'img/forestExportExperiment');
+myForest.exportForest('jpg', 'img/forestExportExperiment');
+myForest.exportForest('pdf', 'img/forestExportExperiment');
+myForest.exportForest('svg', 'img/forestExportExperiment');
+myForest.exportForest('tif', 'img/forestExportExperiment');
 
-// exported images img/treeExperiment1 and img/forestExperiment0 will be indentical
