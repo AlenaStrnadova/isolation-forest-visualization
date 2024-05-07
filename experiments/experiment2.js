@@ -1,7 +1,7 @@
 // demonstration file, exporting a tree and evaluating data
 // data size 256, sample size 180
 
-const { IsolationForest } = require('../index');
+const { IsolationForest } = require('../index')
 
 // data member on index 0 is an anomaly
 const inputData =
@@ -68,17 +68,16 @@ const inputData =
   [3.02, 2.55], [2.12, 1.13], [1.47, 1.14], [3.27, 1.87],
   [1.21, 2.82], [1.63, 1.82], [3.7, 3.42], [1.55, 3.71],
   [2.43, 1.67], [1.84, 3.46], [1.4, 3.07], [3.4, 3.82],
-  [1.31, 2.89], [3.47, 2.98], [2.64, 2.36], [2.74, 2.97]];
+  [1.31, 2.89], [3.47, 2.98], [2.64, 2.36], [2.74, 2.97]]
 
-const myNumberOfTrees = 100;
-const mySampleSize = 180;
+const myNumberOfTrees = 100
+const mySampleSize = 180
 
 // inicializing IsolationForest
-const myForest = new IsolationForest(inputData, myNumberOfTrees, mySampleSize);
+const myForest = new IsolationForest(inputData, myNumberOfTrees, mySampleSize)
 
 // exporting a tree from forest array, on index 0
-myForest.exportTree(myForest.forest[0], 'png', 'img/treeExperiment2');
+myForest.exportTree(myForest.forest[0], 'png', 'img/treeExperiment2')
 
 // evaluating data, asking for 5 most probable anomalies
-myForest.dataAnomalyScore(5);
-
+myForest.dataAnomalyScore(5)
