@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "name": "isolation-forest-visualization",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Exports visual representation of trees in Isolation Forest into different formats using Graphviz. Evaluates the anomaly scores and average path lengths for input data.",
   "main": "index.js",
   "directories": {
