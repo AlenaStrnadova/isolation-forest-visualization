@@ -79,7 +79,7 @@ const exportFormat = 'png'; // output format (e.g., png, svg, pdf)
 const fileName = 'tree'; // output file name (without extension)
 myForest.exportTree(treeToExport, exportFormat, fileName);
 ```
-**Note:** export format and file name are strings, file name can be provided including a name of an existing folder (`"img/tree"`). Export format can be a supported format of the Graphviz software (e.g. `png, pdf, dot, jpg, svg`).
+**Note:** export format and file name are strings, file name can be provided including a name of an existing folder (`"img/tree"`). Export format can be any [supported format of the Graphviz software](https://graphviz.org/docs/outputs/)  (e.g. `png, pdf, dot, jpg, svg`).
 
 
 
